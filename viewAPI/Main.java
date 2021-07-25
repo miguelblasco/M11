@@ -45,7 +45,7 @@ public class Main extends JFrame {
 	
 	// Constructor de la ventana principal y menú del programa
 	public Main() {
-		super("Mòdul 11 -- Milestone 1");
+		super("Mòdul 11 -- Floristeries");
 		
 		panell = (JPanel)getContentPane();
 		panell.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
