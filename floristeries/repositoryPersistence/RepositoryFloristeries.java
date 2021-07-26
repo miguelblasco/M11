@@ -1,12 +1,11 @@
-package repositoryPersistence;
+package floristeries.repositoryPersistence;
 
 import java.util.ArrayList;
 
-import domain.Arbre;
-import domain.Flor;
-import domain.Decoracio;
-import domain.Floristeria;
-import domain.Producte;
+import floristeries.domain.Arbre;
+import floristeries.domain.Decoracio;
+import floristeries.domain.Flor;
+import floristeries.domain.Floristeria;
 
 public class RepositoryFloristeries {
 	
@@ -35,21 +34,21 @@ public class RepositoryFloristeries {
 		
 	}
 	
-	public boolean afegirArbre(int indexFloristeria, Producte producte) {
+	public boolean afegirArbre(int indexFloristeria, Arbre arbre) {
 		
-		return floristeries.get(indexFloristeria).getArbres().add((Arbre) producte);
+		return floristeries.get(indexFloristeria).getArbres().add(arbre);
 		
 	}
 	
-	public boolean afegirFlor(int indexFloristeria, Producte producte) {
+	public boolean afegirFlor(int indexFloristeria, Flor flor) {
 		
-			return floristeries.get(indexFloristeria).getFlors().add((Flor) producte);
+		return floristeries.get(indexFloristeria).getFlors().add(flor);
 			
 	}
 	
-	public boolean afegirDecoracio(int indexFloristeria, Producte producte) {
+	public boolean afegirDecoracio(int indexFloristeria, Decoracio decoracio) {
 		
-		return floristeries.get(indexFloristeria).getDecoracions().add((Decoracio) producte);	
+		return floristeries.get(indexFloristeria).getDecoracions().add(decoracio);	
 		
 	}
 	

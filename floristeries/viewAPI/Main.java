@@ -1,8 +1,8 @@
 /** Back-end Java, IT Academy
-*** M11 - Milestone 1
+*** M11 - Floristeries (Pair Programming)
 *** Miguel Blasco & Roger Torrent */
 
-package viewAPI;
+package floristeries.viewAPI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import application.Controller;
-import domain.Floristeria;
+import floristeries.application.Controller;
+import floristeries.domain.Floristeria;
 
 public class Main extends JFrame {
 	
@@ -161,8 +161,8 @@ public class Main extends JFrame {
 	interface ButtonsProducteFactory {
 		
 		ButtonAfegirProducte afegirButton();
-//		ButtonRetirarProducte retirarButton();  <-- NUEVAS FUNCIONALIDAD PARA MILESTONE 2
-//		ButtonRetirarProducte stockButton();    <-- NUEVAS FUNCIONALIDAD PARA MILESTONE 2
+//		ButtonRetirarProducte retirarButton();
+//		ButtonRetirarProducte stockButton();
 	}
 	
 	class ButtonsArbreFactory implements ButtonsProducteFactory {

@@ -1,4 +1,4 @@
-package viewAPI;
+package floristeries.viewAPI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import domain.Arbre;
-import domain.Decoracio;
-import domain.Flor;
+import floristeries.domain.Arbre;
+import floristeries.domain.Decoracio;
+import floristeries.domain.Flor;
 
 abstract class ButtonProducte extends JButton implements ActionListener {
 	

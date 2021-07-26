@@ -1,14 +1,14 @@
-package application;
+package floristeries.application;
 
 import java.util.StringJoiner;
 
-import domain.Arbre;
-import domain.Decoracio;
-import domain.Flor;
-import domain.Floristeria;
-import domain.Producte;
-import repositoryPersistence.RepositoryFloristeries;
-import viewAPI.Main;
+import floristeries.domain.Arbre;
+import floristeries.domain.Decoracio;
+import floristeries.domain.Flor;
+import floristeries.domain.Floristeria;
+import floristeries.domain.Producte;
+import floristeries.repositoryPersistence.RepositoryFloristeries;
+import floristeries.viewAPI.Main;
 
 public class Controller {
 	
@@ -31,11 +31,11 @@ public class Controller {
 	public boolean afegirProducte (int indexFloristeria, Producte producte) { try {
 		
 		if (producte instanceof Arbre)
-			return repository.afegirArbre(indexFloristeria, producte);
+			return repository.afegirArbre(indexFloristeria, (Arbre) producte);
 		else if (producte instanceof Flor)
-			return repository.afegirFlor(indexFloristeria, producte);
+			return repository.afegirFlor(indexFloristeria, (Flor) producte);
 		else if (producte instanceof Decoracio)
-			return repository.afegirDecoracio(indexFloristeria, producte);
+			return repository.afegirDecoracio(indexFloristeria, (Decoracio) producte);
 		else return false;
 		
 	} catch(Exception e) { Main.error(e); return false; } }
