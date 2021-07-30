@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,9 +29,11 @@ import floristeries.domain.Floristeria;
 public class Main extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
+	
 	private final JPanel panell;
-	private final JButton crearFloristeria, mostrarStock, sortir;
+	private final JButton crearFloristeria, valorStock, sortir;
 	final JComboBox<String> llistaFloristeries;
+	private Box box1, box2;
 	
 	private final ButtonsProducteFactory[] factoriesBotons = {
 		new ButtonsArbreFactory(),
@@ -35,8 +41,10 @@ public class Main extends JFrame {
 		new ButtonsDecoracioFactory(),
 		// Nuevas líneas de productos se añaden aquí
 	};
-	private ButtonProducte[] botonsAfegir = new ButtonProducte[3];
+	// Mantenemos una lista de botones para poder activarlas/desactivarlas al unísono
+	private List<JButton> botons = new ArrayList<>();
 	
+	// Controlador asignado al usuario
 	Controller m11;
 	
 	public static void main(String[] args) {
@@ -52,16 +60,17 @@ public class Main extends JFrame {
 		panell.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		crearFloristeria = new JButton("CrearFloristeria");
-		llistaFloristeries = new JComboBox<String>();
+		llistaFloristeries = new JComboBox<>();
 		llistaFloristeries.setPrototypeDisplayValue("1234567890"); // Fixa la grandària màxima
-		mostrarStock = new JButton("Stock");
-		mostrarStock.setEnabled(false);
-		Box box1 = Box.createHorizontalBox();
+		valorStock = new JButton("ValorStock");
+		valorStock.setEnabled(false);
+		botons.add(valorStock);
+		box1 = Box.createHorizontalBox();
 		box1.add(crearFloristeria);
 		box1.add(Box.createHorizontalStrut(5));
 		box1.add(llistaFloristeries);
 		box1.add(Box.createHorizontalStrut(5));
-		box1.add(mostrarStock);
+		box1.add(valorStock);
 		panell.add(box1);
 		
 		// Floristería nueva
@@ -75,10 +84,8 @@ public class Main extends JFrame {
 				try { if(nom != null  && m11.crearFloristeria(new Floristeria(nom))) {
 					llistaFloristeries.addItem(nom);
 					llistaFloristeries.setSelectedItem(nom);
-					mostrarStock.setEnabled(true);
-					for(int i = 0; i < botonsAfegir.length; i++)
-						botonsAfegir[i].setEnabled(true);
-				} } catch (Exception ex) { error(ex); }
+					botons.forEach(bP -> bP.setEnabled(true)); // Activació dels botons
+				} } catch(Exception ex) { error(ex); }
 			}
 			
 		});
@@ -100,27 +107,23 @@ public class Main extends JFrame {
 			
 		});
 		
-		// Mostrar el inventario de la floristería seleccionada
-		mostrarStock.addActionListener(new ActionListener() {
+		// Mostrar el valor total del inventario de la floristería seleccionada
+		valorStock.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(panell, m11.stock(llistaFloristeries.getSelectedIndex()),
+				JOptionPane.showMessageDialog(panell, m11.valorStock(llistaFloristeries.getSelectedIndex()),
 						"Stock \'" + llistaFloristeries.getSelectedItem() + "\'",
 								JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});
 		
-		// Botones 'AfegirXXX', de las factorías pertinentes
-		Box box2 = Box.createHorizontalBox();
-		for(int i = 0; i < factoriesBotons.length; i++) {
-			botonsAfegir[i] = factoriesBotons[i].afegirButton();
-			box2.add(botonsAfegir[i]);
-			if(i < factoriesBotons.length-1)
-				box2.add(Box.createHorizontalStrut(5));
-		}
-		panell.add(Box.createVerticalStrut(10));
+		box2 = Box.createVerticalBox();
+		// Hileras de botones con la terna 'Producte'
+		afegirBotonsProducte((bPF) -> bPF.afegirButton());  // Creació botons 'AfegirXXX'
+		afegirBotonsProducte((bPF) -> bPF.stockButton());   // Creació botons 'StockXXX'
+		afegirBotonsProducte((bPF) -> bPF.retirarButton()); // Creació botons 'RetirarXXX'
 		panell.add(box2);
 		
 		// Salida del programa
@@ -146,6 +149,21 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	// Llamadas secuenciales a las factorías pertinentes para crear una hilera de 
+	// dedicada a una operación concreta, desglosada por familias de productos.
+	private void afegirBotonsProducte(Function<ButtonsProducteFactory, ButtonProducte> operacio) {
+		Box box = Box.createHorizontalBox();
+		for(int i = 0; i < factoriesBotons.length; i++) {
+			ButtonProducte bP = operacio.apply(factoriesBotons[i]);
+			botons.add(bP);
+			box.add(bP);
+			if(i < factoriesBotons.length-1)
+				box.add(Box.createHorizontalStrut(5));
+		}
+		box2.add(Box.createVerticalStrut(10));
+		box2.add(box);
+	}
+	
 	// Método principal; instancia el controlador
 	private void start() {
 		m11 = new Controller();
@@ -160,16 +178,27 @@ public class Main extends JFrame {
 	// de productos mediante el patrón "Abstract Factory".
 	interface ButtonsProducteFactory {
 		
-		ButtonAfegirProducte afegirButton();
-//		ButtonRetirarProducte retirarButton();
-//		ButtonRetirarProducte stockButton();
+		ButtonProducte afegirButton();
+		ButtonProducte stockButton();
+		ButtonProducte retirarButton();
+		
 	}
 	
 	class ButtonsArbreFactory implements ButtonsProducteFactory {
 		
 		@Override
-		public ButtonAfegirProducte afegirButton() {
-			return new ButtonAfegirArbre("AfegirArbre", "Arbre nou", Main.this); 
+		public ButtonProducte afegirButton() {
+			return new ButtonAfegirArbre("AfegirArbre", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte stockButton() {
+			return new ButtonStockArbres("StockArbres", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte retirarButton() {
+			return new ButtonRetirarArbre("RetirarArbre", Main.this);
 		}
 		
 	}
@@ -177,8 +206,18 @@ public class Main extends JFrame {
 	class ButtonsFlorFactory implements ButtonsProducteFactory {
 		
 		@Override
-		public ButtonAfegirProducte afegirButton() {
-			return new ButtonAfegirFlor("AfegirFlor", "Flor nova", Main.this);
+		public ButtonProducte afegirButton() {
+			return new ButtonAfegirFlor("AfegirFlor", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte stockButton() {
+			return new ButtonStockFlors("StockFlors", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte retirarButton() {
+			return new ButtonRetirarFlor("RetirarFlor", Main.this);
 		}
 		
 	}
@@ -186,8 +225,18 @@ public class Main extends JFrame {
 	class ButtonsDecoracioFactory implements ButtonsProducteFactory {
 		
 		@Override
-		public ButtonAfegirProducte afegirButton() {
-			return new ButtonAfegirDecoracio("AfegirDecoració", "Decoració nova", Main.this);
+		public ButtonProducte afegirButton() {
+			return new ButtonAfegirDecoracio("AfegirDecoració", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte stockButton() {
+			return new ButtonStockDecoracions("StockDecoracions", Main.this);
+		}
+		
+		@Override
+		public ButtonProducte retirarButton() {
+			return new ButtonRetirarDecoracio("RetirarDecoració", Main.this);
 		}
 		
 	}
