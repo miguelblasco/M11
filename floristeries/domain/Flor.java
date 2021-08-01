@@ -4,8 +4,8 @@ public class Flor extends Producte {
 	
 	private String color;
 	
-	public Flor(String nom, String color, float preu ) throws Exception {
-		super(nom, preu);
+	public Flor(String nom, String color, float preu, int quantitat ) throws Exception {
+		super(nom, preu, quantitat);
 		if(color == null || color.isBlank()) throw new Exception("Color sense especificar.");
 		this.color = color;	
 	}

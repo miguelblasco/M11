@@ -4,12 +4,15 @@ public class Producte {
 	
 	private String nom;
 	private float preu;
+	private int quantitat;
 	
-	public Producte(String nom, float preu) throws Exception {
+	public Producte(String nom, float preu, int quantitat) throws Exception {
 		if(nom == null || nom.isBlank()) throw new Exception("Nom del producte buit.");
 		if(preu < 0.0f) throw new Exception("Preu \'" + preu + "\' negatiu.");
+		if(quantitat < 0) throw new Exception("Quantitat \'" + quantitat + "\' negativa.");
 		this.nom = nom;
 		this.preu = preu;
+		this.quantitat = quantitat;
 	}
 	
 	public String getNom() {
@@ -28,8 +31,12 @@ public class Producte {
 		this.preu = preu;
 	}
 	
-	public String toString(String info) {
-		return String.format("%s \"%s\" .... %.2f €", nom, info, preu);
+	public int getQuantitat() {
+		return quantitat;
 	}
 	
+	public String toString(String info) {
+		return String.format("%s \"%s\" .... %d x %.2f €", nom, info, quantitat, preu);
+	}
+
 }

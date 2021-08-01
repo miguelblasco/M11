@@ -6,8 +6,8 @@ public class Decoracio extends  Producte {
 	
 	private Material material;
 	
-	public Decoracio(String nom, Material material, float preu) throws Exception {
-		super(nom, preu);
+	public Decoracio(String nom, Material material, float preu, int quantitat) throws Exception {
+		super(nom, preu, quantitat);
 		if(material == null) throw new Exception("Tipus de material sense especificar.");
 		this.material = material;
 	}

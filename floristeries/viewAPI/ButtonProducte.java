@@ -28,6 +28,7 @@ import javax.swing.event.ListSelectionListener;
 import floristeries.domain.Arbre;
 import floristeries.domain.Decoracio;
 import floristeries.domain.Flor;
+import floristeries.domain.Producte;
 
 // Colección de todas las familias de botones de la interfaz de usuario
 // vinculadas a los objetos de la clase 'Producte' y sus derivados.
@@ -38,7 +39,6 @@ abstract class ButtonProducte extends JButton implements ActionListener {
 	final Main panellPare;
 	String titol;
 	int idxFloristeria;
-	Floristeria floristeria;
 	
 	ButtonProducte(String textButton, Main panellPare) {
 		super(textButton);
@@ -51,8 +51,7 @@ abstract class ButtonProducte extends JButton implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		idxFloristeria = panellPare.llistaFloristeries.getSelectedIndex();
-		floristeria = panellPare.m11.llegirFloristeria(idxFloristeria);
-		titol = "\'" + floristeria.getNom() + "\' -- ";
+		titol = "\'" + panellPare.m11.nomsFloristeries()[idxFloristeria] + "\' -- ";
 	}
 	
 }

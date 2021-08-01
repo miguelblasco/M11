@@ -63,5 +63,25 @@ public class RepositoryFloristeries {
 		return floristeries.get(indexFloristeria);
 		
 	}
+	
+	public Arbre eliminarArbre(int indexFloristeria, int indexProducte) {
+		
+		return floristeries.get(indexFloristeria).getArbres().remove(indexProducte);
+		
+	}
+	
+	public Flor eliminarFlor(int indexFloristeria, int indexProducte) {
+		
+		return floristeries.get(indexFloristeria).getFlors().remove(indexProducte);
+			
+	}
+	
+	public Decoracio eliminarDecoracio(int indexFloristeria, int indexProducte) {
+		
+		return floristeries.get(indexFloristeria).getDecoracions().remove(indexProducte);	
+		
+	}
+	
+	
 
 }

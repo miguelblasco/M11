@@ -4,8 +4,8 @@ public class Arbre extends Producte {
 	
 	private int alcada;
 	
-	public Arbre(String nom, int alcada, float preu) throws Exception {
-		super(nom, preu);
+	public Arbre(String nom, int alcada, float preu, int quantitat) throws Exception {
+		super(nom, preu, quantitat);
 		if(alcada <= 0) throw new Exception("Alçada \'" + alcada + "\' negativa.");
 		this.alcada = alcada;
 	}
